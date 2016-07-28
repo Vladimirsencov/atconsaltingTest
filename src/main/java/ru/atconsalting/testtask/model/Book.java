@@ -1,4 +1,4 @@
-package model;
+package ru.atconsalting.testtask.model;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ public class Book {
     private String ISBN;
     private String title;
     private String authorName;
-    private String userId;
+    private String readerName;
 
     public String getISBN() {
         return ISBN;
@@ -36,12 +36,12 @@ public class Book {
         this.authorName = authorName;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getReaderName() {
+        return readerName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setReaderName(String readerName) {
+        this.readerName = readerName;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Book {
         sb.append(", ISBN='").append(ISBN).append('\'');
         sb.append(", title='").append(title).append('\'');
         sb.append(", authorName='").append(authorName).append('\'');
-        sb.append(", userId='").append(userId).append('\'');
+        sb.append(", readerName='").append(readerName).append('\'');
         sb.append('}');
         return sb.toString();
     }
@@ -73,11 +73,11 @@ public class Book {
                 Objects.equals(ISBN, book.ISBN) &&
                 Objects.equals(title, book.title) &&
                 Objects.equals(authorName, book.authorName) &&
-                Objects.equals(userId, book.userId);
+                Objects.equals(readerName, book.readerName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ISBN, title, authorName, userId);
+        return Objects.hash(id, ISBN, title, authorName, readerName);
     }
 }

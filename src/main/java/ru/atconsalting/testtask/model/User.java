@@ -1,4 +1,4 @@
-package model;
+package ru.atconsalting.testtask.model;
 
 import java.util.Objects;
 import java.util.Set;
@@ -10,8 +10,17 @@ public class User {
     private long id;
     private String userName;
     private String password;
+    private String email;
     private Set<Book> books;
     private Set<Role> roles;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public long getId() {
         return id;
@@ -58,7 +67,7 @@ public class User {
         final StringBuilder sb = new StringBuilder("User{");
         sb.append("id=").append(id);
         sb.append(", userName='").append(userName).append('\'');
-        sb.append(", password='").append(password).append('\'');
+        sb.append(", email='").append(email).append('\'');
         sb.append(", books=").append(books);
         sb.append(", roles=").append(roles);
         sb.append('}');
@@ -70,12 +79,13 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return getId() == user.getId() &&
-                Objects.equals(getUserName(), user.getUserName());
+        return id == user.id &&
+                Objects.equals(userName, user.userName) &&
+                Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserName());
+        return Objects.hash(id, userName, email);
     }
 }
