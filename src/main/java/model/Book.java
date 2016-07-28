@@ -6,7 +6,7 @@ import java.util.Objects;
  * Created by Vladimir_Sentso on 27.07.2016.
  */
 public class Book {
-
+    private long id;
     private String ISBN;
     private String title;
     private String authorName;
@@ -47,7 +47,8 @@ public class Book {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Book{");
-        sb.append("ISBN='").append(ISBN).append('\'');
+        sb.append("id=").append(id);
+        sb.append(", ISBN='").append(ISBN).append('\'');
         sb.append(", title='").append(title).append('\'');
         sb.append(", authorName='").append(authorName).append('\'');
         sb.append(", userId='").append(userId).append('\'');
@@ -55,18 +56,28 @@ public class Book {
         return sb.toString();
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Book)) return false;
         Book book = (Book) o;
-        return Objects.equals(getISBN(), book.getISBN()) &&
-                Objects.equals(getTitle(), book.getTitle()) &&
-                Objects.equals(getAuthorName(), book.getAuthorName());
+        return id == book.id &&
+                Objects.equals(ISBN, book.ISBN) &&
+                Objects.equals(title, book.title) &&
+                Objects.equals(authorName, book.authorName) &&
+                Objects.equals(userId, book.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getISBN(), getTitle(), getAuthorName());
+        return Objects.hash(id, ISBN, title, authorName, userId);
     }
 }
