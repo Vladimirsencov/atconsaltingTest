@@ -16,13 +16,11 @@ public interface BookService {
 
     Book saveBook(Book book);
 
-    boolean deleteBook(long id);
+    Book updateBook(Book book);
 
-    boolean deleteBookByISBN(String ISBN);
+    boolean deleteBook(Book book);
 
-    boolean containsBookByISBN(String ISBN);
+    boolean containsBook(Book book);
 
-    boolean containsBook(long id);
-
-    public boolean setReader(User user, long bookId);
+    boolean setReader(User user, Book book);
 }

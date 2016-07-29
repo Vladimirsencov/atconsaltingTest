@@ -21,41 +21,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Collection<User> getAllUsers() {
-        return null;
+        return userRepository.getAllUsers();
     }
 
     @Override
     public User saveUser(User user) {
-        return null;
+        return userRepository.saveOrUpdateUser(user);
     }
 
     @Override
-    public boolean deleteUser(long id) {
-        return false;
+    public boolean deleteUser(User user) {
+        return userRepository.deleteUser(user.getId());
     }
 
     @Override
-    public boolean deleteUserByName(String userName) {
-        return false;
+    public User updateUser(User user) {
+        return userRepository.saveOrUpdateUser(user);
     }
 
-    @Override
-    public boolean deleteUserByEmail(String email) {
-        return false;
-    }
 
     @Override
     public User get(long id) {
-        return null;
+        return userRepository.get(id);
     }
 
     @Override
     public User getUserByName(String userName) {
-        return null;
+        return userRepository.getUserByName(userName);
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return null;
+        return userRepository.getUserByEmail(email);
     }
 }

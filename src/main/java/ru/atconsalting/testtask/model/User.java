@@ -7,11 +7,10 @@ import java.util.Set;
  * Created by Vladimir_Sentso on 27.07.2016.
  */
 public class User {
-    private long id;
+    private Long id;
     private String userName;
     private String password;
     private String email;
-    private Set<Book> books;
     private Set<Role> roles;
 
     public String getEmail() {
@@ -22,11 +21,11 @@ public class User {
         this.email = email;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -46,14 +45,6 @@ public class User {
         this.password = password;
     }
 
-    public Set<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(Set<Book> books) {
-        this.books = books;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -68,7 +59,6 @@ public class User {
         sb.append("id=").append(id);
         sb.append(", userName='").append(userName).append('\'');
         sb.append(", email='").append(email).append('\'');
-        sb.append(", books=").append(books);
         sb.append(", roles=").append(roles);
         sb.append('}');
         return sb.toString();

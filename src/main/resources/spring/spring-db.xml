@@ -9,7 +9,7 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <jdbc:embedded-database id="dataSource" type="H2">
-        <jdbc:script location="classpath:db/shema.sql"/>
+        <jdbc:script encoding="utf-8" location="classpath:db/shema.sql"/>
         <jdbc:script encoding="utf-8" location="classpath:db/populateDb.sql"/>
     </jdbc:embedded-database>
 
@@ -20,6 +20,10 @@
     </bean>
 
     <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean id="jdbcInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert">
         <constructor-arg ref="dataSource"/>
     </bean>
 

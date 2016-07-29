@@ -13,11 +13,9 @@ public interface UserService {
 
     User saveUser(User user);
 
-    boolean deleteUser(long id);
+    boolean deleteUser(User user);
 
-    boolean deleteUserByName(String userName);
-
-    boolean deleteUserByEmail(String email);
+    User updateUser(User user);
 
     User get(long id);
 

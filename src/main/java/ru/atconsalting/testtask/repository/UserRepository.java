@@ -11,7 +11,7 @@ public interface UserRepository {
 
     Collection<User> getAllUsers();
 
-    User saveUser(User user);
+    User saveOrUpdateUser(User user);
 
     boolean deleteUser(long id);
 
@@ -19,7 +19,7 @@ public interface UserRepository {
 
     boolean deleteUserByEmail(String email);
 
-    User get(long id);
+    User get(Long id);
 
     User getUserByName(String userName);
 

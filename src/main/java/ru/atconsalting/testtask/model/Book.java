@@ -6,11 +6,20 @@ import java.util.Objects;
  * Created by Vladimir_Sentso on 27.07.2016.
  */
 public class Book {
-    private long id;
+    private Long id;
     private String ISBN;
     private String title;
     private String authorName;
     private String readerName;
+    private BookStatus bookStatus;
+
+    public BookStatus getBookStatus() {
+        return bookStatus;
+    }
+
+    public void setBookStatus(BookStatus bookStatus) {
+        this.bookStatus = bookStatus;
+    }
 
     public String getISBN() {
         return ISBN;
@@ -56,11 +65,11 @@ public class Book {
         return sb.toString();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -4,6 +4,7 @@ import ru.atconsalting.testtask.model.Book;
 
 import java.util.Collection;
 
+
 /**
  * Created by Vladimir_Sentso on 28.07.2016.
  */
@@ -13,11 +14,13 @@ public interface BookRepository {
 
     Collection<Book> getBooksWithLimit(int limit, long offset);
 
-    Book saveBook(Book book);
+    Book saveOrUpdateBook(Book book);
 
-    boolean deleteBook(long id);
+    boolean deleteBook(Long id);
 
-    boolean deleteBook(String ISBN);
+    boolean deleteBookByISBN(String ISBN);
 
-    boolean setReader(String userName, long bookId);
+    Book getBook(long id);
+
+    boolean setReader(String userName, Long bookId);
 }
