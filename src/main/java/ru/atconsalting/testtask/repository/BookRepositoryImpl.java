@@ -1,7 +1,6 @@
 package ru.atconsalting.testtask.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -9,7 +8,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.atconsalting.testtask.LoggedUser;
 import ru.atconsalting.testtask.model.Book;
+import ru.atconsalting.testtask.model.BookStatus;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,6 +35,12 @@ public class BookRepositoryImpl implements BookRepository {
         book.setISBN(rs.getString("ISBN"));
         book.setTitle(rs.getString("Title"));
         book.setReaderName(rs.getString("Reader_Name"));
+        BookStatus bookStatus = null;
+        if (book.getReaderName() == null) bookStatus = BookStatus.NOT_USE;
+        else if (book.getReaderName().equalsIgnoreCase(LoggedUser.get().getUsername())) {
+            bookStatus = BookStatus.USE_CURRENT_READER;
+        } else bookStatus = BookStatus.USE_ANOTHER_READER;
+        book.setBookStatus(bookStatus);
         return book;
     };
 
@@ -50,15 +57,6 @@ public class BookRepositoryImpl implements BookRepository {
         return jdbcTemplate.query(query, bookMapper);
     }
 
-    public static void main(String[] args) {
-
-        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
-        ctx.load("spring/spring-app.xml", "spring/spring-db.xml");
-        ctx.refresh();
-        BookRepository rep = (BookRepository) ctx.getBean("bookRepositoryImpl");
-        System.out.println(rep);
-        System.out.println(rep.getAllBooks());
-    }
     @Override
     public Collection<Book> getBooksWithLimit(int limit, long offset) {
         String query = "SELECT * FROM BOOKS LIMIT :limit OFFSET :offset";
@@ -119,8 +117,15 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     @Transactional
-    public boolean setReader(String userName, Long bookId) {
+    public boolean takeBook(String userName, Long bookId) {
         String query = "UPDATE BOOKS SET READER_NAME = ? WHERE ID = ?";
         return jdbcTemplate.update(query, userName, bookId) > 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean revertBool(Long bookId) {
+        String query = "UPDATE BOOKS SET READER_NAME = NULL WHERE ID = ?";
+        return jdbcTemplate.update(query, bookId) > 0;
     }
 }

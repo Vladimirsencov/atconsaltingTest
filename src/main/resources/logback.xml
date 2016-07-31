@@ -30,14 +30,14 @@
             level="debug"/>-->
     <logger name="ru.atconsalting.testtask" level="info"/>
     <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver"
-            level="debug"/>
-    <logger name="org.springframework.security.web.csrf.CsrfFilter" level="debug"/>
+            level="info"/>
+    <logger name="org.springframework.security.web.csrf.CsrfFilter" level="info"/>
 
 
     <!--log hibernate showSql-->
     <logger name="org.hibernate.SQL" level="debug"/>
 
-    <root level="info">
+    <root level="warn">
         <!--<appender-ref ref="file"/>-->
         <appender-ref ref="console"/>
     </root>

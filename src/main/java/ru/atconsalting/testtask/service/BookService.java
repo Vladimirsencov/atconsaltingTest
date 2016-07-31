@@ -22,5 +22,7 @@ public interface BookService {
 
     boolean containsBook(Book book);
 
-    boolean setReader(User user, Book book);
+    boolean takeBook(User user, Book book);
+
+    boolean revertBook(Book book);
 }

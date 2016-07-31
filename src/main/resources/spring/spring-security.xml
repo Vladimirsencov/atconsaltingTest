@@ -1,0 +1,28 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http pattern="/resources/**" security="none"/>
+    <http pattern="/webjars/**" security="none"/>
+
+
+    <http>
+        <intercept-url pattern="/" access="hasRole('ROLE_USER')"/>
+        <http-basic/>
+    </http>
+
+
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"
+                               users-by-username-query=
+                                       "SELECT username, password, 'true' FROM users WHERE username=?"
+                               authorities-by-username-query=
+                                       "SELECT u.username, r.role FROM users AS u LEFT JOIN user_roles AS r WHERE u.id = r.user_id AND u.username = ?"/>
+        </authentication-provider>
+    </authentication-manager>
+</beans:beans>

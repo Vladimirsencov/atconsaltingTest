@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepository {
                 user.setId(id);
                 user.setEmail(rs.getString("email"));
                 user.setUserName(rs.getString("username"));
-                user.setEmail(rs.getString("password"));
+                user.setPassword(rs.getString("password"));
                 user.setRoles(EnumSet.noneOf(Role.class));
                 collector.put(id, user);
             }
@@ -61,7 +61,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Collection<User> getAllUsers() {
-        String query = "SELECT u.ID, u.EMAIL, u.USERNAME, u.PASSWORD, r.ROLE, r.USER_ID FROM USERS AS u LEFT JOIN USER_ROLES AS r ON u.ID = r.USER_ID";
+        String query = "SELECT u.ID, u.EMAIL, u.USERNAME, u.PASSWORD, r.ROLE, r.USER_NAME ,r.USER_ID FROM USERS AS u LEFT JOIN USER_ROLES AS r ON u.USERNAME = r.USER_NAME";
         return jdbcTemplate.query(query, usersExtractor);
     }
 
@@ -84,10 +84,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private int[] saveUserRoles(final User user) {
-        return jdbcInsert
-                .withTableName("user_roles")
-                .executeBatch(user.getRoles().stream()
-                        .map(role -> new MapSqlParameterSource("user_id", user.getId()).addValue("role", String.valueOf(role)))
+        String query = "INSERT INTO USER_ROLES " +
+                "SET USER_ID = :user_id, USER_NAME = :user_name, ROLE = :role";
+        return namedParameterJdbcTemplate.batchUpdate(query, user.getRoles().stream()
+                .map(role -> new MapSqlParameterSource("user_id", user.getId())
+                        .addValue("role", String.valueOf(role))
+                        .addValue("user_name", String.valueOf(user.getUserName())))
                         .toArray(MapSqlParameterSource[]::new));
     }
 
@@ -108,20 +110,17 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public boolean deleteUser(long id) {
-        return false;
+        String query = "DELETE FROM USERS  WHERE ID = ?";
+        return jdbcTemplate.update(query, id) > 0;
     }
 
     @Override
     @Transactional
     public boolean deleteUserByName(String userName) {
-        return false;
+        String query = "DELETE FROM USERS  WHERE USERNAME = ?";
+        return jdbcTemplate.update(query, userName) > 0;
     }
 
-    @Override
-    @Transactional
-    public boolean deleteUserByEmail(String email) {
-        return false;
-    }
 
     @Override
     public User get(Long id) {
@@ -140,11 +139,4 @@ public class UserRepositoryImpl implements UserRepository {
         return DataAccessUtils.singleResult(users);
     }
 
-    @Override
-    public User getUserByEmail(String email) {
-        String query = "SELECT u.ID, u.EMAIL, u.USERNAME, u.PASSWORD, r.ROLE, r.USER_ID FROM USERS AS u LEFT JOIN USER_ROLES AS r ON u.ID = r.USER_ID WHERE u.EMAIL= :email";
-        SqlParameterSource parameterSource = new MapSqlParameterSource("email", email);
-        Collection<User> users = namedParameterJdbcTemplate.query(query, parameterSource, usersExtractor);
-        return DataAccessUtils.singleResult(users);
-    }
 }

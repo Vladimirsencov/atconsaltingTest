@@ -1,0 +1,23 @@
+
+.footer {
+    padding-bottom: 15px;
+}
+
+.error, .message {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.error {
+    color: #a90926;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+}
+
+.message {
+    color: #2f9635;
+    background-color: #c6fbc2;
+    border: 1px solid #9feba6;
+}

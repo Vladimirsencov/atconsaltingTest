@@ -17,12 +17,9 @@ public interface UserRepository {
 
     boolean deleteUserByName(String userName);
 
-    boolean deleteUserByEmail(String email);
-
     User get(Long id);
 
     User getUserByName(String userName);
 
-    User getUserByEmail(String email);
 
 }

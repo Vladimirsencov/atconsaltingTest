@@ -69,7 +69,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean setReader(User user, Book book) {
-        return bookRepository.setReader(user.getUserName(), book.getId());
+    public boolean revertBook(Book book) {
+        return bookRepository.revertBool(book.getId());
+    }
+
+    @Override
+    public boolean takeBook(User user, Book book) {
+        return bookRepository.takeBook(user.getUserName(), book.getId());
     }
 }

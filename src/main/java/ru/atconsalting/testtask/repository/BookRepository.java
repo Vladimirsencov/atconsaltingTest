@@ -22,5 +22,8 @@ public interface BookRepository {
 
     Book getBook(long id);
 
-    boolean setReader(String userName, Long bookId);
+    boolean takeBook(String userName, Long bookId);
+
+
+    boolean revertBool(Long bookId);
 }
