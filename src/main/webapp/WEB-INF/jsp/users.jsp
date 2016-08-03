@@ -14,7 +14,7 @@
             <div class="view-box">
                 <a class="btn btn-sm btn-info" onclick="add()">Add user</a>
 
-                <table class="table table-striped display" id="dataTable">
+                <table class="table table-striped display" id="userTable">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -67,6 +67,10 @@
     </div>
 </div>
 </body>
-<jsp:include page="footer.jsp"/>
+<script type="text/javascript" src="webjars/jquery/2.2.3/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="webjars/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="webjars/noty/2.3.8/js/noty/packaged/jquery.noty.packaged.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="resources/js/userDataTable.js"></script>
 </html>

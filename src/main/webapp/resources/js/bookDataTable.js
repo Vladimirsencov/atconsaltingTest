@@ -135,7 +135,7 @@ function failNoty(event, jqXHR, options, jsExc) {
 }
 
 function renderEditReference(data, type, row) {
-    var ISBN = data.ISBN;
+    var ISBN = row.ISBN;
     if (type == 'display') {
         return '<a class = "editReference" href="' + row.id + '">' + ISBN + '</a>';
     }
@@ -167,7 +167,7 @@ function updateBook() {
     $(document).on('click', '.editReference', function () {
         var t = $(this);
         var attr = t.attr('href');
-        updateBook(attr);
+        up(attr);
     })
 }
 
@@ -181,9 +181,9 @@ function updateTable() {
 }
 
 $(function () {
-    datatableApi = $('#datatable').DataTable({
+    datatableApi = $('#bookTable').DataTable({
         "ajax": {
-            "url": ajaxUrl,
+            "url": ajaxUrl + '/' + userName + '/' + limit + '/' + offset,
             "dataSrc": ""
         },
         "paging": false,
@@ -204,13 +204,13 @@ $(function () {
                 "data": "status",
                 "render": function (data, type, row) {
                     if (type = "display") {
-                        if (data.status == "isFree") {
+                        if (row.status == "isFree") {
                             renderTakeBtn
                         }
-                        else if (data.status == userName) {
+                        else if (row.status == userName) {
                             renderRevertBtn
                         } else {
-                            return data.status;
+                            return row.status;
                         }
                     }
                     return data;

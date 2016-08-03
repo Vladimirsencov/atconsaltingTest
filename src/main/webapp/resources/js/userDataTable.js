@@ -3,21 +3,19 @@
  */
 var form;
 var userName;
-var ajaxUrl = '/ajax/users/';
+var ajaxUrl = 'ajax/users/';
 var datatableApi;
 
 
 $(function getUserName() {
     userName = $('#loggedUser').text();
-})
+});
 
-function updateUser() {
-    $(document).on('click', '.editReference', function () {
+$(document).on('click', '.editReference', function (e) {
         var t = $(this);
-        var attr = t.attr('href');
+    var attr = ajaxUrl + t.attr('href');
         updateRow(attr);
-    })
-}
+});
 
 function makeEditable() {
     form = $('#userForm');
@@ -45,7 +43,7 @@ function add() {
 }
 
 function updateRow(id) {
-    $.get(ajaxUrl + id, function (data) {
+    $.get('ajax/users/' + id, function (data) {
         $.each(data, function (key, value) {
             form.find("input[name='" + key + "']").val(
                 key === "dateTime" ? value.replace('T', ' ').substr(0, 16) : value
@@ -56,16 +54,10 @@ function updateRow(id) {
 }
 
 function deleteRow(id) {
-    result = confirm("You want delete user with " + userName);
+    result = confirm("Do you want delete user");
     if (result) {
-        $.ajax({
-            url: ajaxUrl + id,
-            type: 'DELETE',
-            success: function () {
-                updateTable();
-                successNoty('Deleted');
-            }
-        });
+        var url = 'ajax/users/' + id;
+        jQuery.delete
     }
 }
 
@@ -76,7 +68,7 @@ function updateTableByData(data) {
 function save() {
     $.ajax({
         type: "POST",
-        url: ajaxUrl,
+        url: 'ajax/users',
         data: form.serialize(),
         success: function () {
             $('#editRow').modal('hide');
@@ -117,9 +109,9 @@ function failNoty(event, jqXHR, options, jsExc) {
 }
 
 function renderEditReference(data, type, row) {
-    var userName = data.ISBN;
+    var userName = row.userName;
     if (type == 'display') {
-        return '<a class = "editReference" href="' + row.id + '">' + userName + '</a>';
+        return '<a onclick="return false" class = "editReference" href="' + row.id + '">' + userName + '</a>';
     }
     return data;
 }
@@ -132,34 +124,34 @@ function renderDeleteBtn(data, type, row) {
 }
 
 
-$(function () {
-    datatableApi = $('#datatable').DataTable({
-        "ajax": {
-            "url": ajaxUrl,
-            "dataSrc": ""
-        },
-        "paging": false,
-        "info": true,
-        "columns": [
-            {
-                "data": "name",
-                "render": renderEditReference
+jQuery(function () {
+    datatableApi = jQuery('#userTable').DataTable(
+        {
+            "ajax": {
+                "url": ajaxUrl,
+                "dataSrc": ""
             },
-            {
-                "orderable": false,
-                "defaultContent": "",
-                "render": renderDeleteBtn
-            },
+            "paging": false,
+            "columns": [
+                {
+                    "data": "userName",
+                    "render": renderEditReference
+                },
+                {
+                    "orderable": false,
+                    "defaultContent": "",
+                    "render": renderDeleteBtn
+                },
 
-        ],
-        "order": [
-            [
-                0,
-                "asc"
-            ]
-        ],
-        "initComplete": makeEditable
-    });
+            ],
+            "order": [
+                [
+                    0,
+                    "asc"
+                ]
+            ],
+            "initComplete": makeEditable
+        });
 });
 
 
