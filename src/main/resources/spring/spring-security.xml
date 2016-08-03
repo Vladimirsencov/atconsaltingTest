@@ -11,8 +11,12 @@
 
 
     <http>
-        <intercept-url pattern="/" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/books" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/users" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/ajax/users/**" access="permitAll"/>
+        <intercept-url pattern="/ajax/books/**" access="permitAll"/>
         <http-basic/>
+        <csrf disabled="true"/>
     </http>
 
 

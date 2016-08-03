@@ -3,12 +3,9 @@ package ru.atconsalting.testtask.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.atconsalting.testtask.model.Book;
-import ru.atconsalting.testtask.model.BookStatus;
-import ru.atconsalting.testtask.model.User;
 import ru.atconsalting.testtask.repository.BookRepository;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  * Created by Vladimir_Sentsov on 29.07.2016.
@@ -23,27 +20,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Collection<Book> getAllBooks(User user) {
-        return bookRepository.getAllBooks().stream()
-                .peek(book -> setBookStatus(user, book))
-                .collect(Collectors.toList());
+    public Collection<Book> getAllBooks() {
+        return bookRepository.getAllBooks();
     }
 
     @Override
-    public Collection<Book> getBooksWithLimit(User user, int limit, long offset) {
-        return bookRepository.getBooksWithLimit(limit, offset).stream()
-                .peek(book -> setBookStatus(user, book))
-                .collect(Collectors.toList());
-
+    public Collection<Book> getBooksWithLimit(int limit, long offset) {
+        return bookRepository.getBooksWithLimit(limit, offset);
     }
 
-    private void setBookStatus(User user, Book book) {
-        if (book.getReaderName() == null) {
-            book.setBookStatus(BookStatus.NOT_USE);
-        } else if (book.getReaderName().equals(user.getUserName())) {
-            book.setBookStatus(BookStatus.USE_CURRENT_READER);
-        } else book.setBookStatus(BookStatus.USE_ANOTHER_READER);
-    }
 
     @Override
     public Book saveBook(Book book) {
@@ -57,9 +42,9 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public boolean deleteBook(Book book) {
-        boolean result = bookRepository.deleteBook(book.getId());
-        return result || bookRepository.deleteBookByISBN(book.getISBN());
+    public boolean deleteBook(Long id) {
+        return bookRepository.deleteBook(id);
+
     }
 
 
@@ -68,13 +53,14 @@ public class BookServiceImpl implements BookService {
         return bookRepository.getBook(book.getId()) != null;
     }
 
+
     @Override
-    public boolean revertBook(Book book) {
-        return bookRepository.revertBool(book.getId());
+    public boolean takeBook(String userName, Long id) {
+        return bookRepository.takeBook(userName, id);
     }
 
     @Override
-    public boolean takeBook(User user, Book book) {
-        return bookRepository.takeBook(user.getUserName(), book.getId());
+    public boolean revertBook(Long id) {
+        return bookRepository.revertBool(id);
     }
 }

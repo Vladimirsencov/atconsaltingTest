@@ -16,14 +16,15 @@ public class BookUtil {
         return book;
     }
 
-    public static BookTo asTo(Book book) {
-        return new BookTo.BookToBuilder()
+    public static BookTo asTo(String userName, Book book) {
+        BookTo bookTo = new BookTo.BookToBuilder()
                 .setAuthorName(book.getAuthorName())
                 .setId(book.getId())
                 .setISBN(book.getISBN())
-                .setStatus(book.getBookStatus())
                 .setTitle(book.getTitle())
+                .setReaderName(book.getReaderName())
                 .buildBookTo();
+        return setBookToStatus(bookTo, userName);
     }
 
     public static Book updateFromTo(Book book, BookTo to) {
@@ -32,4 +33,16 @@ public class BookUtil {
         book.setTitle(to.getTitle());
         return book;
     }
+
+    private static BookTo setBookToStatus(BookTo bookTo, String userName) {
+        if (bookTo.getReaderName() != null && bookTo.getReaderName().equalsIgnoreCase(userName)) {
+            bookTo.setStatus("usedLoggedUser");
+        } else if (bookTo.getReaderName() != null && (!bookTo.getReaderName().equalsIgnoreCase(userName))) {
+            bookTo.setStatus(bookTo.getReaderName());
+        } else {
+            bookTo.setStatus("isFree");
+        }
+        return bookTo;
+    }
+
 }

@@ -1,7 +1,6 @@
 package ru.atconsalting.testtask.service;
 
 import ru.atconsalting.testtask.model.Book;
-import ru.atconsalting.testtask.model.User;
 
 import java.util.Collection;
 
@@ -10,19 +9,19 @@ import java.util.Collection;
  */
 public interface BookService {
 
-    Collection<Book> getAllBooks(User user);
+    Collection<Book> getAllBooks();
 
-    Collection<Book> getBooksWithLimit(User user, int limit, long offset);
+    Collection<Book> getBooksWithLimit(int limit, long offset);
 
     Book saveBook(Book book);
 
     Book updateBook(Book book);
 
-    boolean deleteBook(Book book);
+    boolean deleteBook(Long id);
 
     boolean containsBook(Book book);
 
-    boolean takeBook(User user, Book book);
+    boolean takeBook(String userName, Long id);
 
-    boolean revertBook(Book book);
+    boolean revertBook(Long id);
 }

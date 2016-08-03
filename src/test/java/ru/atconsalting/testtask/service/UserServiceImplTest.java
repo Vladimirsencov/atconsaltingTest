@@ -1,6 +1,7 @@
 package ru.atconsalting.testtask.service;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class UserServiceImplTest {
         Assert.assertEquals(str, service.getAllUsers().toString());
     }
 
+    @Ignore
     @Test
     public void testSaveUser() throws Exception {
         User user = new User();
@@ -54,7 +56,7 @@ public class UserServiceImplTest {
     @Test
     public void testDeleteUser() throws Exception {
         User user = service.get(5);
-        service.deleteUser(user);
+        service.deleteUser(5L);
         Assert.assertEquals(true, !service.getAllUsers().contains(user));
         String query = "SELECT * FROM USER_ROLES WHERE USER_ID = ? ";
         Assert.assertEquals(0, template.query(query, (rs, rowNum) -> rs.getString("role"), user.getId()).size());

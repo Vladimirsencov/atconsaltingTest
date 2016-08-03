@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(User user) {
-        return userRepository.deleteUser(user.getId());
+    public boolean deleteUser(Long id) {
+        return userRepository.deleteUser(id);
     }
 
     @Override

@@ -8,10 +8,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.atconsalting.testtask.LoggedUser;
 import ru.atconsalting.testtask.model.Book;
-import ru.atconsalting.testtask.model.BookStatus;
 
+import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +24,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
-
+    private final DataSource dataSource;
 
     private final RowMapper<Book> bookMapper = (rs, rowNum) -> {
         Book book = new Book();
@@ -35,20 +33,14 @@ public class BookRepositoryImpl implements BookRepository {
         book.setISBN(rs.getString("ISBN"));
         book.setTitle(rs.getString("Title"));
         book.setReaderName(rs.getString("Reader_Name"));
-        BookStatus bookStatus = null;
-        if (book.getReaderName() == null) bookStatus = BookStatus.NOT_USE;
-        else if (book.getReaderName().equalsIgnoreCase(LoggedUser.get().getUsername())) {
-            bookStatus = BookStatus.USE_CURRENT_READER;
-        } else bookStatus = BookStatus.USE_ANOTHER_READER;
-        book.setBookStatus(bookStatus);
         return book;
     };
 
     @Autowired
-    public BookRepositoryImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedJdbcTemplate, SimpleJdbcInsert jdbcInsert) {
+    public BookRepositoryImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedJdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedJdbcTemplate;
-        this.jdbcInsert = jdbcInsert;
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -73,7 +65,7 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     private Book saveBook(Book book) {
-
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(dataSource);
         jdbcInsert.withTableName("BOOKS")
                 .usingGeneratedKeyColumns("ID");
 

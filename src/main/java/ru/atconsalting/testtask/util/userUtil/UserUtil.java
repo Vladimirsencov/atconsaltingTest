@@ -22,7 +22,7 @@ public class UserUtil {
     }
 
     public static UserTo asTo(User user) {
-        return new UserTo(user.getId(), user.getUserName(), user.getEmail(), user.getPassword());
+        return new UserTo(user.getId(), user.getUserName(), user.getPassword(), user.getEmail());
     }
 
     public static User updateFromTo(User user, UserTo userTo) {

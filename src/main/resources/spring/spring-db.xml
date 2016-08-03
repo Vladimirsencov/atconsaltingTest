@@ -1,6 +1,5 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns="http://www.springframework.org/schema/beans"
@@ -16,29 +15,18 @@
 
     <context:component-scan base-package="ru.atconsalting.testtask.repository"/>
 
-    <bean id="poolDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
-          destroy-method="close"
-          p:driverClassName="org.h2.Driver"
-          p:url="jdbc:h2:mem:dataSource"
-          p:username="sa"
-          p:password=""
-    />
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <constructor-arg ref="poolDataSource"/>
+        <constructor-arg ref="dataSource"/>
     </bean>
 
     <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-        <constructor-arg ref="poolDataSource"/>
-    </bean>
-
-    <bean id="jdbcInsert" class="org.springframework.jdbc.core.simple.SimpleJdbcInsert">
-        <constructor-arg ref="poolDataSource"/>
+        <constructor-arg ref="dataSource"/>
     </bean>
 
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="poolDataSource"/>
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
     <tx:annotation-driven/>

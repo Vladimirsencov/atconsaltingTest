@@ -6,20 +6,12 @@ import java.util.Objects;
  * Created by Vladimir_Sentso on 27.07.2016.
  */
 public class Book {
+
     private Long id;
     private String ISBN;
     private String title;
     private String authorName;
     private String readerName;
-    private BookStatus bookStatus;
-
-    public BookStatus getBookStatus() {
-        return bookStatus;
-    }
-
-    public void setBookStatus(BookStatus bookStatus) {
-        this.bookStatus = bookStatus;
-    }
 
     public String getISBN() {
         return ISBN;

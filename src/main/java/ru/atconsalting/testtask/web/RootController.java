@@ -1,6 +1,10 @@
 package ru.atconsalting.testtask.web;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -11,12 +15,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class RootController {
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public String userList() {
-        return "userList";
+    public String users(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        model.addAttribute("userName", user.getUsername() == null ? "" : user.getUsername());
+        return "users";
     }
 
     @RequestMapping(value = "/books", method = RequestMethod.GET)
-    public String mealList() {
-        return "bookList";
+    public String books(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        model.addAttribute("userName", user.getUsername() == null ? "" : user.getUsername());
+        return "books";
     }
 }

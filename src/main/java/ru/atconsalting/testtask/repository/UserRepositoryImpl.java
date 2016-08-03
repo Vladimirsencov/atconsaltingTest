@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.atconsalting.testtask.model.Role;
 import ru.atconsalting.testtask.model.User;
 
+import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
+    private final DataSource dataSource;
 
     private final ResultSetExtractor<Collection<User>> usersExtractor = rs -> {
         Map<Long, User> collector = new HashMap<>();
@@ -53,10 +54,10 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Autowired
-    public UserRepositoryImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedJdbcTemplate, SimpleJdbcInsert jdbcInsert) {
+    public UserRepositoryImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedJdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedJdbcTemplate;
-        this.jdbcInsert = jdbcInsert;
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -68,10 +69,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public User saveOrUpdateUser(User user) {
-        return user.getId() == null ? saveUser(user) : updateUser(user);
+        return (user.getId() == null || user.getId() == 0) ? saveUser(user) : updateUser(user);
     }
 
     private User saveUser(User user) {
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(dataSource);
         jdbcInsert.withTableName("users").usingGeneratedKeyColumns("id");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("email", user.getEmail());
@@ -90,7 +92,7 @@ public class UserRepositoryImpl implements UserRepository {
                 .map(role -> new MapSqlParameterSource("user_id", user.getId())
                         .addValue("role", String.valueOf(role))
                         .addValue("user_name", String.valueOf(user.getUserName())))
-                        .toArray(MapSqlParameterSource[]::new));
+                .toArray(MapSqlParameterSource[]::new));
     }
 
 
