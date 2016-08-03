@@ -3,13 +3,23 @@
  */
 var form;
 var userName;
-$(function getUserName() {
+var ajaxUrl = 'ajax/books/';
+var datatableApi;
+var failedNote;
+var limit = 5;
+var offset = 0;
+
+$(function () {
     userName = $('#loggedUser').text();
 })
 
+function showMore() {
+    offset += 5;
+    updateTable;
+}
+
 function makeEditable() {
     form = $('#bookForm');
-
     form.submit(function () {
         save();
         return false;
@@ -44,12 +54,37 @@ function updateRow(id) {
 }
 
 function deleteRow(id) {
+    result = confirm("You want delete book with " + id);
+    if (result) {
+        $.ajax({
+            url: ajaxUrl + id,
+            type: 'DELETE',
+            success: function () {
+                updateTable();
+                successNoty('Deleted');
+            }
+        });
+    }
+}
+
+function revertBook(id) {
     $.ajax({
         url: ajaxUrl + id,
-        type: 'DELETE',
+        type: 'PUT',
         success: function () {
             updateTable();
-            successNoty('Deleted');
+            successNoty('Reverted');
+        }
+    });
+}
+
+function takeBook(id) {
+    $.ajax({
+        url: ajaxUrl + id + '/' + userName,
+        type: 'PUT',
+        success: function () {
+            updateTable;
+            successNoty('Taked');
         }
     });
 }
@@ -65,13 +100,12 @@ function save() {
         data: form.serialize(),
         success: function () {
             $('#editRow').modal('hide');
-            updateTable();
+            updateTable
             successNoty('Saved');
         }
     });
 }
 
-var failedNote;
 
 function closeNoty() {
     if (failedNote) {
@@ -100,9 +134,10 @@ function failNoty(event, jqXHR, options, jsExc) {
     });
 }
 
-function renderEditBtn(data, type, row) {
+function renderEditReference(data, type, row) {
+    var ISBN = data.ISBN;
     if (type == 'display') {
-        return '<a class="btn btn-xs btn-primary" onclick="updateRow(' + row.id + ');">Edit</a>';
+        return '<a class = "editReference" href="' + row.id + '">' + ISBN + '</a>';
     }
     return data;
 }
@@ -113,14 +148,33 @@ function renderDeleteBtn(data, type, row) {
     }
     return data;
 }
-var ajaxUrl = 'ajax/profile/meals/';
-var datatableApi;
+
+function renderTakeBtn(data, type, row) {
+    if (type == 'display') {
+        return '<a class="btn btn-xs btn-primary" onclick="takeBook(' + row.id + ');">Take</a>';
+    }
+    return data;
+}
+
+function renderRevertBtn(data, type, row) {
+    if (type == 'display') {
+        return '<a class="btn btn-xs btn-primary" onclick="revertBook(' + row.id + ');">Revert</a>';
+    }
+    return data;
+}
+
+function updateBook() {
+    $(document).on('click', '.editReference', function () {
+        var t = $(this);
+        var attr = t.attr('href');
+        updateBook(attr);
+    })
+}
+
 
 function updateTable() {
     $.ajax({
-        type: "POST",
-        url: ajaxUrl + 'filter',
-        data: $('#filter').serialize(),
+        url: ajaxUrl + userName + '/' + limit + '/' + offset,
         success: updateTableByData
     });
     return false;
@@ -136,31 +190,38 @@ $(function () {
         "info": true,
         "columns": [
             {
-                "data": "dateTime",
-                "render": function (date, type, row) {
-                    if (type == 'display') {
-                        return date.replace('T', ' ').substr(0, 16);
+                "data": "ISBN",
+                "render": renderEditReference,
+                "orderable": false
+            },
+            {
+                "data": "authorName"
+            },
+            {
+                "data": "title"
+            },
+            {
+                "data": "status",
+                "render": function (data, type, row) {
+                    if (type = "display") {
+                        if (data.status == "isFree") {
+                            renderTakeBtn
+                        }
+                        else if (data.status == userName) {
+                            renderRevertBtn
+                        } else {
+                            return data.status;
+                        }
                     }
-                    return date;
+                    return data;
                 }
-            },
-            {
-                "data": "description"
-            },
-            {
-                "data": "calories"
-            },
-            {
-                "defaultContent": "",
-                "orderable": false,
-                "render": renderEditBtn
             },
             {
                 "defaultContent": "",
                 "orderable": false,
                 "render": renderDeleteBtn
+            },
 
-            }
         ],
         "order": [
             [
@@ -168,52 +229,8 @@ $(function () {
                 "desc"
             ]
         ],
-        "createdRow": function (row, data, dataIndex) {
-            $(row).addClass(data.exceed ? 'exceeded' : 'normal');
-        },
         "initComplete": function () {
-            $('#filter').submit(function () {
-                updateTable();
-                return false;
-            });
-
-            var startDate = $('#startDate');
-            var endDate = $('#endDate');
-
-            startDate.datetimepicker({
-                timepicker: false,
-                format: 'Y-m-d',
-                lang: 'ru',
-                formatDate: 'Y-m-d',
-                onShow: function (ct) {
-                    this.setOptions({
-                        maxDate: endDate.val() ? endDate.val() : false
-                    })
-                }
-            });
-            endDate.datetimepicker({
-                timepicker: false,
-                format: 'Y-m-d',
-                lang: 'ru',
-                formatDate: 'Y-m-d',
-                onShow: function (ct) {
-                    this.setOptions({
-                        minDate: startDate.val() ? startDate.val() : false
-                    })
-                }
-            });
-
-            $('.time-picker').datetimepicker({
-                datepicker: false,
-                format: 'H:i',
-                lang: 'ru'
-            });
-
-            $('#dateTime').datetimepicker({
-                format: 'Y-m-d H:i',
-                lang: 'ru'
-            });
-
+            updateTable();
             makeEditable();
         }
     });

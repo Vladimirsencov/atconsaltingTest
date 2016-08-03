@@ -24,6 +24,7 @@
                 </tr>
                 </thead>
             </table>
+            <a class="btn btn-sm btn-info" onclick=showMore()>Swow more</a>
         </div>
     </div>
 </div>
@@ -75,5 +76,5 @@
 </div>
 </body>
 <jsp:include page="footer.jsp"/>
-<script type="text/javascript" src="resources/js/bookdatatable.js"></script>
+<script type="text/javascript" src="resources/js/bookDataTable.js"></script>
 </html>

@@ -69,5 +69,4 @@
 </body>
 <jsp:include page="footer.jsp"/>
 <script type="text/javascript" src="resources/js/userDataTable.js"></script>
-
 </html>

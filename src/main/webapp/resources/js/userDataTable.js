@@ -3,10 +3,21 @@
  */
 var form;
 var userName;
+var ajaxUrl = '/ajax/users/';
+var datatableApi;
+
 
 $(function getUserName() {
     userName = $('#loggedUser').text();
 })
+
+function updateUser() {
+    $(document).on('click', '.editReference', function () {
+        var t = $(this);
+        var attr = t.attr('href');
+        updateBook(attr);
+    })
+}
 
 function makeEditable() {
     form = $('#userForm');
@@ -45,27 +56,17 @@ function updateRow(id) {
 }
 
 function deleteRow(id) {
-    $.ajax({
-        url: ajaxUrl + id,
-        type: 'DELETE',
-        success: function () {
-            updateTable();
-            successNoty('Deleted');
-        }
-    });
-}
-
-function enable(chkbox, id) {
-    var enabled = chkbox.is(":checked");
-    chkbox.closest('tr').css("text-decoration", enabled ? "none" : "line-through");
-    $.ajax({
-        url: ajaxUrl + id,
-        type: 'POST',
-        data: 'enabled=' + enabled,
-        success: function () {
-            successNoty(enabled ? 'Enabled' : 'Disabled');
-        }
-    });
+    result = confirm("You want delete user with " + userName);
+    if (result) {
+        $.ajax({
+            url: ajaxUrl + id,
+            type: 'DELETE',
+            success: function () {
+                updateTable();
+                successNoty('Deleted');
+            }
+        });
+    }
 }
 
 function updateTableByData(data) {
@@ -83,6 +84,7 @@ function save() {
             successNoty('Saved');
         }
     });
+
 }
 
 var failedNote;
@@ -114,9 +116,10 @@ function failNoty(event, jqXHR, options, jsExc) {
     });
 }
 
-function renderEditBtn(data, type, row) {
+function renderEditReference(data, type, row) {
+    var userName = data.ISBN;
     if (type == 'display') {
-        return '<a class="btn btn-xs btn-primary" onclick="updateRow(' + row.id + ');">Edit</a>';
+        return '<a class = "editReference" href="' + row.id + '">' + userName + '</a>';
     }
     return data;
 }
@@ -127,16 +130,45 @@ function renderDeleteBtn(data, type, row) {
     }
     return data;
 }
-var ajaxUrl = '/ajax/users';
-var datatableApi;
-var html;
-$(function gethtml() {
-    html = $('#dataTable').html();
-})
 
 
 $(function () {
-    datatableApi = $('#dataTable').DataTable()
+    datatableApi = $('#datatable').DataTable({
+        "ajax": {
+            "url": ajaxUrl,
+            "dataSrc": ""
+        },
+        "paging": false,
+        "info": true,
+        "columns": [
+            {
+                "data": "name",
+                "render": ""
+            },
+            {
+                "data": "email",
+                "render": function (data, type, row) {
+                    if (type == 'display') {
+                        return '<a href="mailto:' + data + '">' + data + '</a>';
+                    }
+                    return data;
+                }
+            },
+            {
+                "orderable": false,
+                "defaultContent": "",
+                "render": renderDeleteBtn
+            },
+
+        ],
+        "order": [
+            [
+                0,
+                "asc"
+            ]
+        ],
+        "initComplete": makeEditable
+    });
 });
 
 
