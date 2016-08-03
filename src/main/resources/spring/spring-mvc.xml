@@ -9,7 +9,7 @@
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <bean class="ru.atconsalting.librare.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
+    <bean class="ru.atconsalting.library.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
     <!-- serve static resources (*.html, ...) from src/main/webapp/ -->
     <mvc:default-servlet-handler/>
@@ -79,7 +79,7 @@
     </bean>
 
     <mvc:interceptors>
-        <bean class="ru.atconsalting.librare.web.interceptors.ModelInterceptor"/>
+        <bean class="ru.atconsalting.library.web.interceptors.ModelInterceptor"/>
         <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
             <property name="paramName" value="lang"/>
         </bean>
