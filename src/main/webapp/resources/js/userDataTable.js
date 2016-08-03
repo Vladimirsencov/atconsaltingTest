@@ -15,7 +15,7 @@ function updateUser() {
     $(document).on('click', '.editReference', function () {
         var t = $(this);
         var attr = t.attr('href');
-        updateBook(attr);
+        updateRow(attr);
     })
 }
 
@@ -143,16 +143,7 @@ $(function () {
         "columns": [
             {
                 "data": "name",
-                "render": ""
-            },
-            {
-                "data": "email",
-                "render": function (data, type, row) {
-                    if (type == 'display') {
-                        return '<a href="mailto:' + data + '">' + data + '</a>';
-                    }
-                    return data;
-                }
+                "render": renderEditReference
             },
             {
                 "orderable": false,
