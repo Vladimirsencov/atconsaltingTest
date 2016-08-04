@@ -27,6 +27,7 @@ public class UserUtil {
     }
 
     public static User updateFromTo(User user, UserTo userTo) {
+        user.setId(userTo.getId());
         user.setUserName(userTo.getUserName());
         if (Objects.nonNull(userTo.getEmail())) {
             user.setEmail(userTo.getEmail());

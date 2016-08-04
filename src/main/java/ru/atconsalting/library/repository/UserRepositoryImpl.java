@@ -104,7 +104,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private int[] updateUserRoles(User user) {
-        String query = "DELETE FROM USER_ROLES  WHERE USER_ID = ?";
+        String query = "DELETE  FROM USER_ROLES  WHERE USER_ID = ?";
         jdbcTemplate.update(query, user.getId());
         return saveUserRoles(user);
     }

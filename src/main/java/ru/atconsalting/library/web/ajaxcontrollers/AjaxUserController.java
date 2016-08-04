@@ -58,6 +58,7 @@ public class AjaxUserController {
                 service.updateUser(UserUtil.updateFromTo(new User(), userTo));
             }
         } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
             throw new DataIntegrityViolationException("exception.duplicate_userName");
         }
     }

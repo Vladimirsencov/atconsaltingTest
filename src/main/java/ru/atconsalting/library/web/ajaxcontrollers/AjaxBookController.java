@@ -77,7 +77,7 @@ public class AjaxBookController {
             if (bookTo.getId() == null || bookTo.getId() == 0L) {
                 service.saveBook(BookUtil.createFromTo(bookTo));
             } else {
-                service.saveBook(BookUtil.updateFromTo(new Book(), bookTo));
+                service.updateBook(BookUtil.updateFromTo(new Book(), bookTo));
             }
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("exception.duplicate ISBN");
