@@ -39,10 +39,11 @@
                         <input type="text" hidden="hidden" id="id" name="id">
 
                         <div class="form-group">
-                            <label for="name" class="control-label col-xs-3">Name</label>
+                            <label for="name" class="control-label col-xs-3">useName</label>
 
                             <div class="col-xs-9">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                <input type="text" class="form-control" id="userName" name="userName"
+                                       placeholder="userName">
                             </div>
                         </div>
 
@@ -67,7 +68,7 @@
     </div>
 </div>
 </body>
-<script type="text/javascript" src="webjars/jquery/2.2.3/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/jquery/2.2.3/jquery.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="webjars/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="webjars/noty/2.3.8/js/noty/packaged/jquery.noty.packaged.min.js"></script>

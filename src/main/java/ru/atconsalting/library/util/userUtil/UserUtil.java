@@ -5,6 +5,7 @@ import ru.atconsalting.library.model.User;
 import ru.atconsalting.library.to.UserTo;
 
 import java.util.EnumSet;
+import java.util.Objects;
 
 /**
  * Created by Vladimir_Sentso on 31.07.2016.
@@ -27,13 +28,21 @@ public class UserUtil {
 
     public static User updateFromTo(User user, UserTo userTo) {
         user.setUserName(userTo.getUserName());
-        user.setEmail(userTo.getEmail());
+        if (Objects.nonNull(userTo.getEmail())) {
+            user.setEmail(userTo.getEmail());
+        }
         user.setPassword(userTo.getPassword());
         return prepareToSave(user);
     }
 
     public static User prepareToSave(User user) {
-        user.setEmail(user.getEmail().toLowerCase());
+        if (Objects.nonNull(user.getEmail())) {
+            user.setEmail(user.getEmail().toLowerCase());
+        }
+        //TODO костыль чтобы не падало по NullPointer
+        if (Objects.isNull(user.getRoles())) {
+            user.setRoles(EnumSet.of(Role.ROLE_USER));
+        }
         return user;
     }
 }

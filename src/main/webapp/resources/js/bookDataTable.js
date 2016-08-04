@@ -11,11 +11,18 @@ var offset = 0;
 
 $(function () {
     userName = $('#loggedUser').text();
+
 })
 
+$(document).on('click', '.editReference', function (e) {
+    var t = $(this);
+    var attr = t.attr('href');
+    updateRow(attr);
+});
+
 function showMore() {
-    offset += 5;
-    updateTable;
+    limit += 5;
+    updateTable();
 }
 
 function makeEditable() {
@@ -28,12 +35,6 @@ function makeEditable() {
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });
-
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    $(document).ajaxSend(function (e, xhr, options) {
-        xhr.setRequestHeader(header, token);
-    });
 }
 
 function add() {
@@ -45,9 +46,7 @@ function add() {
 function updateRow(id) {
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
-            form.find("input[name='" + key + "']").val(
-                key === "dateTime" ? value.replace('T', ' ').substr(0, 16) : value
-            );
+            form.find("input[name='" + key + "']").val(value);
         });
         $('#editRow').modal();
     });
@@ -60,7 +59,7 @@ function deleteRow(id) {
             url: ajaxUrl + id,
             type: 'DELETE',
             success: function () {
-                updateTable();
+                updateTable;
                 successNoty('Deleted');
             }
         });
@@ -69,6 +68,7 @@ function deleteRow(id) {
 
 function revertBook(id) {
     $.ajax({
+
         url: ajaxUrl + id,
         type: 'PUT',
         success: function () {
@@ -90,6 +90,7 @@ function takeBook(id) {
 }
 
 function updateTableByData(data) {
+    console.log(data + "");
     datatableApi.clear().rows.add(data).draw();
 }
 
@@ -100,7 +101,7 @@ function save() {
         data: form.serialize(),
         success: function () {
             $('#editRow').modal('hide');
-            updateTable
+            updateTable()
             successNoty('Saved');
         }
     });
@@ -137,7 +138,7 @@ function failNoty(event, jqXHR, options, jsExc) {
 function renderEditReference(data, type, row) {
     var ISBN = row.ISBN;
     if (type == 'display') {
-        return '<a class = "editReference" href="' + row.id + '">' + ISBN + '</a>';
+        return '<a  onclick="return false" class = "editReference" href="' + row.id + '">' + ISBN + '</a>';
     }
     return data;
 }
@@ -163,19 +164,11 @@ function renderRevertBtn(data, type, row) {
     return data;
 }
 
-function updateBook() {
-    $(document).on('click', '.editReference', function () {
-        var t = $(this);
-        var attr = t.attr('href');
-        up(attr);
-    })
-}
 
-
-function updateTable() {
+var updateTable = function () {
     $.ajax({
         url: ajaxUrl + userName + '/' + limit + '/' + offset,
-        success: updateTableByData
+        success: updateTableByData(msg),
     });
     return false;
 }
@@ -204,11 +197,11 @@ $(function () {
                 "data": "status",
                 "render": function (data, type, row) {
                     if (type = "display") {
-                        if (row.status == "isFree") {
-                            renderTakeBtn
+                        if (row.status === "isFree") {
+                            return renderTakeBtn(data, type, row);
                         }
-                        else if (row.status == userName) {
-                            renderRevertBtn
+                        else if (row.status === "usedLoggedUser") {
+                            return renderRevertBtn(data, type, row)
                         } else {
                             return row.status;
                         }
@@ -230,7 +223,6 @@ $(function () {
             ]
         ],
         "initComplete": function () {
-            updateTable();
             makeEditable();
         }
     });

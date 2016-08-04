@@ -6,17 +6,17 @@ var userName;
 var ajaxUrl = 'ajax/users/';
 var datatableApi;
 
-
+//Устанвливаем имя текущего пользователя
 $(function getUserName() {
     userName = $('#loggedUser').text();
 });
 
 $(document).on('click', '.editReference', function (e) {
-        var t = $(this);
-    var attr = ajaxUrl + t.attr('href');
-        updateRow(attr);
+    var t = $(this);
+    var attr = t.attr('href');
+    updateRow(attr);
 });
-
+//Устанавливаем обработчик формы
 function makeEditable() {
     form = $('#userForm');
 
@@ -29,11 +29,6 @@ function makeEditable() {
         failNoty(event, jqXHR, options, jsExc);
     });
 
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    $(document).ajaxSend(function (e, xhr, options) {
-        xhr.setRequestHeader(header, token);
-    });
 }
 
 function add() {
@@ -43,11 +38,9 @@ function add() {
 }
 
 function updateRow(id) {
-    $.get('ajax/users/' + id, function (data) {
+    $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
-            form.find("input[name='" + key + "']").val(
-                key === "dateTime" ? value.replace('T', ' ').substr(0, 16) : value
-            );
+            form.find("input[name='" + key + "']").val(value);
         });
         $('#editRow').modal();
     });
@@ -56,8 +49,14 @@ function updateRow(id) {
 function deleteRow(id) {
     result = confirm("Do you want delete user");
     if (result) {
-        var url = 'ajax/users/' + id;
-        jQuery.delete
+        $.ajax({
+            url: ajaxUrl + id,
+            type: 'DELETE',
+            success: function () {
+                updateTable();
+                successNoty('Deleted');
+            }
+        });
     }
 }
 
@@ -68,7 +67,7 @@ function updateTableByData(data) {
 function save() {
     $.ajax({
         type: "POST",
-        url: 'ajax/users',
+        url: ajaxUrl,
         data: form.serialize(),
         success: function () {
             $('#editRow').modal('hide');
