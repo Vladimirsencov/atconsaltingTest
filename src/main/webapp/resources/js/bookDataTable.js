@@ -59,7 +59,7 @@ function deleteRow(id) {
             url: ajaxUrl + id,
             type: 'DELETE',
             success: function () {
-                updateTable;
+                updateTable();
                 successNoty('Deleted');
             }
         });
@@ -68,7 +68,6 @@ function deleteRow(id) {
 
 function revertBook(id) {
     $.ajax({
-
         url: ajaxUrl + id,
         type: 'PUT',
         success: function () {
@@ -83,14 +82,13 @@ function takeBook(id) {
         url: ajaxUrl + id + '/' + userName,
         type: 'PUT',
         success: function () {
-            updateTable;
+            updateTable();
             successNoty('Taked');
         }
     });
 }
 
 function updateTableByData(data) {
-    console.log(data + "");
     datatableApi.clear().rows.add(data).draw();
 }
 
@@ -101,7 +99,7 @@ function save() {
         data: form.serialize(),
         success: function () {
             $('#editRow').modal('hide');
-            updateTable()
+            updateTable();
             successNoty('Saved');
         }
     });
@@ -168,7 +166,7 @@ function renderRevertBtn(data, type, row) {
 var updateTable = function () {
     $.ajax({
         url: ajaxUrl + userName + '/' + limit + '/' + offset,
-        success: updateTableByData(msg),
+        success: updateTableByData,
     });
     return false;
 }

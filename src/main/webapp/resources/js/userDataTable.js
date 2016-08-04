@@ -13,8 +13,8 @@ $(function getUserName() {
 
 $(document).on('click', '.editReference', function (e) {
     var t = $(this);
-    var attr = t.attr('href');
-    updateRow(attr);
+    var id = t.attr('href');
+    updateRow(id);
 });
 //Устанавливаем обработчик формы
 function makeEditable() {
@@ -44,6 +44,14 @@ function updateRow(id) {
         });
         $('#editRow').modal();
     });
+}
+
+var updateTable = function () {
+    $.ajax({
+        url: ajaxUrl,
+        success: updateTableByData
+    });
+    return false;
 }
 
 function deleteRow(id) {
