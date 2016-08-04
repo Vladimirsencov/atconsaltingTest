@@ -39,7 +39,7 @@
                 <h2 class="modal-title">Book edit</h2>
             </div>
             <div class="modal-body">
-                <form:form class="form-horizontal" method="post" id="detailsForm">
+                <form:form class="form-horizontal" method="post" id="bookForm">
                     <input type="hidden" id="id" name="id">
 
                     <div class="form-group">
@@ -51,10 +51,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="author" class="control-label col-xs-3">Author</label>
+                        <label for="authorName" class="control-label col-xs-3">Author</label>
 
                         <div class="col-xs-9">
-                            <input type="text" class="form-control" id="author" name="author" placeholder="Author">
+                            <input type="text" class="form-control" id="authorName" name="authorName"
+                                   placeholder="Author">
                         </div>
                     </div>
                     <div class="form-group">

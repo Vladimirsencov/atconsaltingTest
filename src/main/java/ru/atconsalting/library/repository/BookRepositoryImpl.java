@@ -61,23 +61,20 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     @Transactional
     public Book saveOrUpdateBook(Book book) {
-        return book.getId() == null ? saveBook(book) : updateBook(book);
+        return (book.getId() == null || book.getId() == 0) ? saveBook(book) : updateBook(book);
     }
 
     private Book saveBook(Book book) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(dataSource);
         jdbcInsert.withTableName("BOOKS")
                 .usingGeneratedKeyColumns("ID");
-
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("reader_name", book.getReaderName());
         parameters.put("isbn", book.getISBN());
         parameters.put("title", book.getTitle());
         parameters.put("author_name", book.getAuthorName());
-
         Number key = jdbcInsert.executeAndReturnKey(parameters);
         book.setId(key.longValue());
-
         return book;
     }
 

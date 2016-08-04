@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class RootController {
 
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String root() {
+        return "redirect:books";
+    }
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String users(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

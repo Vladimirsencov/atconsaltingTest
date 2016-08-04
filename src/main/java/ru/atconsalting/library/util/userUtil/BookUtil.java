@@ -28,6 +28,7 @@ public class BookUtil {
     }
 
     public static Book updateFromTo(Book book, BookTo to) {
+        book.setId(to.getId());
         book.setAuthorName(to.getAuthorName());
         book.setISBN(to.getISBN());
         book.setTitle(to.getTitle());

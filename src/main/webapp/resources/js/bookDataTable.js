@@ -11,7 +11,6 @@ var offset = 0;
 
 $(function () {
     userName = $('#loggedUser').text();
-
 })
 
 $(document).on('click', '.editReference', function (e) {
@@ -27,6 +26,7 @@ function showMore() {
 
 function makeEditable() {
     form = $('#bookForm');
+
     form.submit(function () {
         save();
         return false;
@@ -44,7 +44,7 @@ function add() {
 }
 
 function updateRow(id) {
-    $.get(ajaxUrl + id, function (data) {
+    $.get(ajaxUrl + 'book/' + id, function (data) {
         $.each(data, function (key, value) {
             form.find("input[name='" + key + "']").val(value);
         });
@@ -216,7 +216,7 @@ $(function () {
         ],
         "order": [
             [
-                0,
+                1,
                 "desc"
             ]
         ],
@@ -225,4 +225,5 @@ $(function () {
         }
     });
 });
+
 

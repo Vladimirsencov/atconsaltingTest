@@ -58,6 +58,12 @@ public class AjaxBookController {
         service.revertBook(id);
     }
 
+    @RequestMapping(value = "/book/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Book getBook(@PathVariable("id") Long id) {
+        LOGGER.info("get Book with " + id);
+        return service.getBook(id);
+    }
+
     @RequestMapping(value = "/{id}/{userName}", method = RequestMethod.PUT)
     public void takeBook(@PathVariable("userName") String userName, @PathVariable("id") Long id) {
         LOGGER.info("Take  book" + id);
