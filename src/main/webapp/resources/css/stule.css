@@ -1,7 +1,6 @@
 .header {
-    color: #a90926;
-    font-size: 36px;
-    background-color: #f2dede;
+    color: #3efa3c;
+    font-size: 48px;
     padding-bottom: 15px;
 }
 
@@ -23,7 +22,7 @@
 }
 
 .message {
-    color: #2f9635;
-    background-color: #c6fbc2;
+    color: #7afaa4;
+    background-color: #b2bcfa;
     border: 1px solid #9feba6;
 }

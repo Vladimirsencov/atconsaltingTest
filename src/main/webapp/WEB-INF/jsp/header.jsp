@@ -15,6 +15,7 @@
     <base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/"/>
     <link rel="stylesheet" href="webjars/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="webjars/datatables/1.10.11/css/jquery.dataTables.min.css">
+    <link href="<c:url value="/resources/css/stule.css" />" rel="stylesheet">
 </head>
 
 
